@@ -10,15 +10,18 @@ import java.util.*;
 @Service
 public class WordGameService {
 
-    private final List<String> words;
+    private final Map<String, List<String>> wordsByLanguage;
     private final Random random = new Random();
 
     public WordGameService() {
-        this.words = initializeWords();
+        this.wordsByLanguage = initializeWords();
     }
 
-    private List<String> initializeWords() {
-        return Arrays.asList(
+    private Map<String, List<String>> initializeWords() {
+        Map<String, List<String>> words = new HashMap<>();
+
+        // Türkçe kelimeler
+        words.put("tr", Arrays.asList(
                 "KALEM", "MASA", "SANDALYE", "KITAP", "DEFTER",
                 "ELMA", "ARMUT", "MEYVE", "SEBZE", "DOMATES",
                 "ARABA", "MOTOR", "BISIKLET", "OTOBUS", "TREN",
@@ -26,12 +29,29 @@ public class WordGameService {
                 "OKUL", "SINIF", "OGRENCI", "OGRETMEN", "DERS",
                 "BILGISAYAR", "TELEFON", "TABLET", "KLAVYE", "FARE",
                 "FUTBOL", "BASKET", "VOLEYBOL", "TENIS", "YUZME"
-        );
+        ));
+
+        // İngilizce kelimeler
+        words.put("en", Arrays.asList(
+                "PENCIL", "TABLE", "CHAIR", "BOOK", "NOTEBOOK",
+                "APPLE", "PEAR", "FRUIT", "VEGETABLE", "TOMATO",
+                "CAR", "MOTOR", "BICYCLE", "BUS", "TRAIN",
+                "SEA", "SUN", "LIGHT", "DARK", "STAR",
+                "SCHOOL", "CLASS", "STUDENT", "TEACHER", "LESSON",
+                "COMPUTER", "PHONE", "TABLET", "KEYBOARD", "MOUSE",
+                "FOOTBALL", "BASKETBALL", "VOLLEYBALL", "TENNIS", "SWIMMING",
+                "HOUSE", "DOOR", "WINDOW", "GARDEN", "FLOWER",
+                "WATER", "FIRE", "EARTH", "WIND", "CLOUD",
+                "MUSIC", "DANCE", "SONG", "GUITAR", "PIANO"
+        ));
+
+        return words;
     }
 
-    public List<WordChallenge> generateWordChallenges(int count) {
+    public List<WordChallenge> generateWordChallenges(int count, String language) {
         List<WordChallenge> challenges = new ArrayList<>();
-        List<String> selectedWords = new ArrayList<>(words);
+        List<String> wordsForLanguage = wordsByLanguage.getOrDefault(language, wordsByLanguage.get("tr"));
+        List<String> selectedWords = new ArrayList<>(wordsForLanguage);
         Collections.shuffle(selectedWords);
 
         for (int i = 0; i < Math.min(count, selectedWords.size()); i++) {
@@ -64,7 +84,8 @@ public class WordGameService {
         return scrambled.toString();
     }
 
-    public boolean validateWord(String word) {
-        return words.contains(word.toUpperCase());
+    public boolean validateWord(String word, String language) {
+        List<String> wordsForLanguage = wordsByLanguage.getOrDefault(language, wordsByLanguage.get("tr"));
+        return wordsForLanguage.contains(word.toUpperCase());
     }
 }

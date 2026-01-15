@@ -18,12 +18,12 @@ public class WordGameController {
     private WordGameService wordGameService;
 
     @GetMapping("/challenge")
-    public List<WordChallenge> getWordChallenges() {
-        return wordGameService.generateWordChallenges(6);
+    public List<WordChallenge> getWordChallenges(@RequestParam(defaultValue = "tr") String lang) {
+        return wordGameService.generateWordChallenges(6, lang);
     }
 
     @PostMapping("/validate")
-    public boolean validateWord(@RequestBody String word) {
-        return wordGameService.validateWord(word);
+    public boolean validateWord(@RequestBody String word, @RequestParam(defaultValue = "tr") String lang) {
+        return wordGameService.validateWord(word, lang);
     }
 }
