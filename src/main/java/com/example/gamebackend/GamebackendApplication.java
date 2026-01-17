@@ -11,17 +11,20 @@ public class GamebackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GamebackendApplication.class, args);
-	}
-
-	@Bean
+	} @Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:3000")
+						.allowedOrigins(
+								"https://*.vercel.app",
+								"https://braingymfrontend-7ybx.vercel.app/",
+								"http://localhost:3000"
+						)
 						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-						.allowedHeaders("*");
+						.allowedHeaders("*")
+						.allowCredentials(false);
 			}
 		};
 	}
